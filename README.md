@@ -1,2 +1,2 @@
-cmu_naresuan
+CMU Project
 ============
