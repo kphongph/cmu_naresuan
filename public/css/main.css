@@ -1,0 +1,14 @@
+body {
+  background-color:#aaaaaa;
+}
+
+table.content_table {
+  background-color:#ffffff;
+  border-spacing:5px;
+  border:1px solid #eeeeee;
+}
+
+table.content_table td {
+  border-spacing:5px;
+  border:1px solid #eeeeee;
+}
