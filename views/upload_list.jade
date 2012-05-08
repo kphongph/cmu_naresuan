@@ -1,0 +1,46 @@
+extends layout
+
+block script
+  script(src="#{baseurl}/script/mongodb_csv.js")
+  script(type="text/javascript")
+    $(document).ready(function() {
+      jsonTable('csv_table', function(jsonData) {
+        $('#control').empty();
+        $.each(jsonData.content.column, function(index, value) {
+          var div_id = "column_"+index;
+          $('#control').append('<tr><td id="'+div_id+'">Remove</td><td>'+value+'</td></tr>');
+          $('#'+div_id).click(function() {
+            jsonData.remove_column(index);
+            $(this).parent().remove();
+          });
+        });
+        $('#control').append('<tr><td id="generate_content" colspan="2">Generate</td></tr>');
+        $('#generate_content').click(function() {
+          jsonData.generate(function(row_data) {
+            $.ajax({
+              url:"#{baseurl}/upload/mongodb/save",
+              data:{"data":row_data},
+              type:"POST",
+              success: function(data) {
+                //alert(JSON.stringify(data));
+                if(data.status == "ok") {
+                  $('#result').append('Insert '+data.row_id+'<br>');
+                }
+              }
+            });
+           // alert(JSON.stringify(row_data));
+          });
+        });
+      });
+    });
+    
+
+block content
+  table(id='control')
+  p(id='result')
+  p List Object
+    table(class='content_table',id='csv_table') 
+      each item, index in csv_raw
+        tr
+          each content in item
+            td #{content}
