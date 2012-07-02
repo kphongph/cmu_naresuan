@@ -1,0 +1,58 @@
+extends ../layout
+
+block script
+  script(type="text/javascript")
+    $(document).ready(function() {
+      $.ajax({
+        url:"#{baseurl}/smis/ajax/search",
+        success: function(data) {
+          if(data.status == "ok") {
+            for(var i=0;i<data.contents.length;i++) {
+              $('#search_field')
+                .append($('<option></option>')
+                .attr("value",data.contents[i])
+                .text(data.contents[i]));
+            }
+            $('#submit_button').click(function() {
+              var field = $('#search_field').children(":selected").text();
+              var value = $('#search_text').val();
+               //alert('Searching '+field+' for containing '+value);
+              $.ajax({
+                url:"#{baseurl}/smis/ajax/search",
+                data:{"field":field,"value":value},
+                type:"POST",
+                success: function(data) {
+                  var str='Found <b>'+data.length+'</b> Records <br>';
+                  for(var i=0;i<data.length;i++) {
+                    str+=data[i]['value']+' '+data[i]['_id']+'<br>';
+                  }
+                  $('#result').empty();
+      
+                  $('#result').html(str);
+                }
+              });
+               
+            });
+          }
+        }
+      });
+      
+    });
+
+block content
+ table(align='center')
+  tr
+   td 
+    select(id='search_field',class='contentSelect')
+   td 
+    input(type='text',id='search_text',class='contentTextbox')
+   td
+    input(type='button',id='submit_button',value='Search',class='greenbtn') 
+ table(width='100%')
+  tr
+   td(width='80px')
+   td
+    table(class='topiclast')
+     tr
+      td(colspan='2',valign='top')
+       p(id='result')
