@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+  each value,key in smis
+    p
+      b #{key}
+      i #{value}
+  if row_data
+    table
+      each content in row_data
+        tr 
+          td #{content.name}
+          td #{content.value}
+
