@@ -15,7 +15,8 @@ UploadView.prototype = {
   upload: function(req,res) {
     var self = this;
     var rows = [];
-    cp874.decode('/tmp/66f14fd121c8946d9d1486f74cec5a0e', function(data_converted) {
+    // cp874.decode('/tmp/66f14fd121c8946d9d1486f74cec5a0e', function(data_converted) {
+    cp874.decode(req.files.upload.path, function(data_converted) {
       csv().from(data_converted)
       .on('data', function(data, index) {
         rows.push(data);
@@ -30,6 +31,7 @@ UploadView.prototype = {
   },
   save: function(req,res) {
     var content = req.body.data;
+    console.log(content);
     smis_provider.save(content,function(err,rowid) {
       if(err) {
         res.contentType('json');

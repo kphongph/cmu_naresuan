@@ -23,8 +23,15 @@ block script
                 type:"POST",
                 success: function(data) {
                   var str='Found <b>'+data.length+'</b> Records <br>';
+                  var rows_id = [];
                   for(var i=0;i<data.length;i++) {
-                    str+=data[i]['value']+' '+data[i]['_id']+'<br>';
+                    str+='<a href="#{baseurl}/smis/'+data[i]['_id']+'">';
+                    str+=data[i]['value']+'</a>';
+                    if($.inArray(data[i]['row_id'],rows_id) == -1) {
+                      rows_id.push(data[i]['row_id']);
+                      str+='::'+data[i]['row_id'];
+                    }
+                    str+='<br>';
                   }
                   $('#result').empty();
       

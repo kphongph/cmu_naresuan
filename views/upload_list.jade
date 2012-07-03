@@ -36,11 +36,23 @@ block script
     
 
 block content
-  table(id='control')
-  p(id='result')
-  p List Object
-    table(class='content_table',id='csv_table') 
-      each item, index in csv_raw
-        tr
-          each content in item
-            td #{content}
+ table(width='100%')
+  tr
+   td(valign='top')
+    table(class='upload')
+     tr
+      td(class='style_box',valign='top')
+       p List Object
+     tr(id='control')
+      td
+       p(id='result')
+   td(valign='top')
+    table(class='upload',id='csv_table') 
+     each item, index in csv_raw
+      tr
+       each content in item
+        td(valign='top')
+         #{content}
+
+
+

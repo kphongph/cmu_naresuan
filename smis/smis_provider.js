@@ -44,6 +44,42 @@ SmisProvider.prototype.save = function(data, callback) {
   });
 };
 
+SmisProvider.prototype.findById = function(id,callback) {
+  this.getCollection(function(error, smis_collection) {
+    if( error ) callback(error)
+      else {
+        smis_collection.findOne({_id: smis_collection.db.bson_serializer.ObjectID.createFromHexString(id)}, function(error, result) {
+          if( error ) callback(error)
+          else callback(null, result)
+        });
+      }
+  });
+};
+
+SmisProvider.prototype.findByRowId = function(id,callback) {
+  this.getCollection(function(error, smis_collection) {
+    if( error ) callback(error)
+      else {
+        smis_collection.find({row_id: id}).toArray(function(error, results) {
+          if( error ) callback(error)
+          else callback(null, results)
+        });
+      }
+  });
+};
+
+SmisProvider.prototype.findByRowIdStr = function(id,callback) {
+  this.getCollection(function(error, smis_collection) {
+    if( error ) callback(error)
+      else {
+        smis_collection.find({row_id: smis_collection.db.bson_serializer.ObjectID.createFromHexString(id)}).toArray(function(error, results) {
+          if( error ) callback(error)
+          else callback(null, results)
+        });
+      }
+  });
+};
+
 SmisProvider.prototype.findAll = function(callback) {
   this.getCollection(function(error, smis_collection) {
     if(error) {
@@ -59,5 +95,23 @@ SmisProvider.prototype.findAll = function(callback) {
     }
   });
 };
+
+
+SmisProvider.prototype.filter = function(query, callback) {
+  this.getCollection(function(error, smis_collection) {
+    if(error) {
+      callback(error);
+    } else {
+      smis_collection.find(query).toArray(function(error, results) {
+        if(error) {
+          callback(error);
+        } else { 
+          callback(null, results);
+        }
+      });
+    }
+  });
+};
+
 
 exports.SmisProvider = SmisProvider

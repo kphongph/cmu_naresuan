@@ -1,10 +1,4 @@
 exports.parse = function(data_list, configure, callback) {
-  configure = {
-    headers : { 
-      'name':{title:'ชื่อ-นามสกุล (นร.)',required:true},
-      'index':{title:'ลำดับที่',required:true, regex:/^\d+$/}
-    }
-  };
   var obj_list = [];
   for(var row=0;row<data_list.length;row++) {
     var obj={};
@@ -44,7 +38,7 @@ exports.parse = function(data_list, configure, callback) {
        
         if(('regex' in configure.headers[key])) {
           console.log(obj[key].match(configure.headers[key].regex));
-          if(!obj[key].match(configure.headers[key].regex)) {
+          if(!obj[key].match(new RegExp(configure.headers[key].regex))) {
               validated=false;  
               break;
           }

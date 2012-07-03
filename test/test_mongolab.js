@@ -8,7 +8,7 @@ db.open(function(err, db) {
     console.log("We are connected");
     var collection = new mongo.Collection(db, 'test_collection');
 //    collection.remove();
-    collection.find({"name":"เลขประจำตัว 13 หลัก"}).toArray(function(err, items) {
+    collection.find({"name":"เลขประจำตัว 13 หลัก","value":/^1-58/}).toArray(function(err, items) {
       for(index in items) {
         console.log("Found "+JSON.stringify(items[index]));
       }

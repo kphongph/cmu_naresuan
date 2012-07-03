@@ -1,14 +1,52 @@
 extends ../layout
 
+block script
+  script(type="text/javascript)
+    $(document).ready(function() {
+      var table = {'row':[],'column':[]};
+      $.ajax({
+         url:"#{baseurl}/smis/ajax/row/!{smis.row_id}",
+         success: function(data) {
+           var content={};
+           $.each(data, function(i, v) {
+             if($.inArray(v.name,table.column)==-1) {
+               table.column.push(v.name);
+             }
+             content[v.name]=v.value;
+
+             $("#header").append('<td>'+v.name+'</td>');
+             $("#content").append('<td>'+v.value+'</td>');
+             $("#debug").append(JSON.stringify(table)+'<br>');
+           });
+
+           table.row.push(content);
+           
+           $.each(table.row, function(i, v) {
+             $("#row_table").append('<tr></tr>');
+             $("#debug").append(i+'::'+v+'<br>');
+             for(var i=0;i<table.column.length;i++) {
+               $("#row_table tr:last").append('<td></td>');
+             }
+             $.each(v, function(key,value) {
+               $("#row_table tr:last td:eq("+$.inArray(key,table.column)+")").append(value);
+               $("#debug").append(JSON.stringify(table.column)+'<br>');
+               $("#debug").append(key+'::'+value+'::'+$.inArray(key,table.column)+'<br>');
+             });
+           });
+
+           $("#debug").append(JSON.stringify(table)+'<br>');
+         }
+      });
+    });
+
 block content
   each value,key in smis
     p
       b #{key}
       i #{value}
   if row_data
-    table
-      each content in row_data
-        tr 
-          td #{content.name}
-          td #{content.value}
+    table(id="row_table")
+      tr(id="header")
+      tr(id="content") 
+  p(id="debug")
 
